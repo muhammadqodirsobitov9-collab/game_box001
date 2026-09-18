@@ -26,8 +26,10 @@ jobs:
 
       - name: Find Flutter Root and Build
         run: |
-          # pubspec.yaml joylashgan papkani avtomatik topish
-          PROJECT_DIR=$(dirname $(find . -maxdepth 3 -name "pubspec.yaml" | head -n 1))
+          # Cheksiz chuqurlikdan pubspec.yaml joylashgan papkani topish
+          PUBSPEC_PATH=$(find . -name "pubspec.yaml" -not -path "*/.*" | head -n 1)
+          PROJECT_DIR=$(dirname "$PUBSPEC_PATH")
+          
           echo "Loyiha papkasi topildi: $PROJECT_DIR"
           cd "$PROJECT_DIR"
           
