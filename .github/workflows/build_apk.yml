@@ -24,18 +24,19 @@ jobs:
         with:
           channel: 'stable'
 
-      - name: Generate Android Files and Build APK
+      - name: Auto-fix Ticker Imports and Build APK
         run: |
-          # Автоматический поиск папки с pubspec.yaml
           PUBSPEC_PATH=$(find . -name "pubspec.yaml" -not -path "*/.*" | head -n 1)
           PROJECT_DIR=$(dirname "$PUBSPEC_PATH")
           
           cd "$PROJECT_DIR"
           
-          # Генерация недостающих папок android/ios
+          # android papkasini yaratish
           flutter create . --platforms=android
           
-          # Сборка приложения
+          # Barcha o'yin fayllariga yetishmayotgan importni avtomatik qo'shish
+          find lib/games -name "*.dart" -exec sed -i '1i import '\''package:flutter/scheduler.dart'\'';' {} +
+          
           flutter pub get
           flutter build apk --debug --no-tree-shake-icons
 
@@ -44,4 +45,3 @@ jobs:
         with:
           name: Gamebox-v1.0.0-debug
           path: "**/build/app/outputs/flutter-apk/app-debug.apk"
-        
