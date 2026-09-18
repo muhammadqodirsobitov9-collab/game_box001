@@ -24,15 +24,18 @@ jobs:
         with:
           channel: 'stable'
 
-      - name: Find Flutter Root and Build
+      - name: Generate Android Files and Build APK
         run: |
-          # Cheksiz chuqurlikdan pubspec.yaml joylashgan papkani topish
+          # Автоматический поиск папки с pubspec.yaml
           PUBSPEC_PATH=$(find . -name "pubspec.yaml" -not -path "*/.*" | head -n 1)
           PROJECT_DIR=$(dirname "$PUBSPEC_PATH")
           
-          echo "Loyiha papkasi topildi: $PROJECT_DIR"
           cd "$PROJECT_DIR"
           
+          # Генерация недостающих папок android/ios
+          flutter create . --platforms=android
+          
+          # Сборка приложения
           flutter pub get
           flutter build apk --debug --no-tree-shake-icons
 
@@ -41,3 +44,4 @@ jobs:
         with:
           name: Gamebox-v1.0.0-debug
           path: "**/build/app/outputs/flutter-apk/app-debug.apk"
+        
